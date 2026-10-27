@@ -2,12 +2,12 @@
 class AgriCharts {
     constructor() {
         this.chartColors = {
-            primary: '#4a6741',
-            secondary: '#6b8f71',
-            accent: '#8fbc8f',
-            success: '#4a6741',
-            warning: '#c48a1a',
-            danger: '#b5342a'
+            primary: '#16a34a',
+            secondary: '#0d9488',
+            accent: '#10b981',
+            success: '#16a34a',
+            warning: '#f59e0b',
+            danger: '#ef4444'
         };
     }
 

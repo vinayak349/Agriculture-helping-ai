@@ -37,8 +37,8 @@
                 <div class="row">
                     <div class="col-6 mb-3">
                         <div class="stat-card text-center p-4 bg-light rounded">
-                            <h3 class="text-success mb-2">10K+</h3>
-                            <p class="mb-0">Happy Farmers</p>
+                            <h3 class="text-success mb-2"><i class="fas fa-leaf me-2"></i>7</h3>
+                            <p class="mb-0">Smart Farming Tools</p>
                         </div>
                     </div>
                     <div class="col-6 mb-3">
@@ -164,31 +164,42 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="bg-plant-gradient p-5 rounded text-white text-center">
-                    <h4 class="mb-4">Our AI Models</h4>
-                    <div class="row">
-                        <div class="col-6 mb-3">
-                            <div class="model-stat">
-                                <h3>95%</h3>
-                                <small>Prediction Accuracy</small>
-                            </div>
-                        </div>
-                        <div class="col-6 mb-3">
-                            <div class="model-stat">
-                                <h3>1M+</h3>
-                                <small>Data Points</small>
+                <div class="about-models-card bg-plant-gradient text-white text-center">
+                    <h3 class="about-models-title">Our AI Models</h3>
+                    <p class="about-models-subtitle">
+                        Multi-layered machine learning algorithms trained on global agricultural datasets.
+                    </p>
+                    <div class="row g-3 model-stat-grid">
+                        <div class="col-6">
+                            <div class="model-stat-card">
+                                <span class="stat-value">95%</span>
+                                <span class="stat-caption">
+                                    <i class="fas fa-bullseye text-warning"></i> Prediction Accuracy
+                                </span>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="model-stat">
-                                <h3>50+</h3>
-                                <small>Crop Varieties</small>
+                            <div class="model-stat-card">
+                                <span class="stat-value">1M+</span>
+                                <span class="stat-caption">
+                                    <i class="fas fa-database text-info"></i> Data Points
+                                </span>
                             </div>
                         </div>
                         <div class="col-6">
-                            <div class="model-stat">
-                                <h3>10+</h3>
-                                <small>Years of Data</small>
+                            <div class="model-stat-card">
+                                <span class="stat-value">50+</span>
+                                <span class="stat-caption">
+                                    <i class="fas fa-seedling text-success"></i> Crop Varieties
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="model-stat-card">
+                                <span class="stat-value">10+</span>
+                                <span class="stat-caption">
+                                    <i class="fas fa-history text-accent"></i> Years of Data
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -273,10 +284,20 @@
     background: var(--surface-green);
 }
 .tech-item {
-    padding: 0.5rem;
-    background: var(--surface-green);
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
+    padding: 0.85rem 1rem;
+    background: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+}
+.tech-item:hover {
+    border-color: var(--plant-emerald);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 .model-stat h3 {
     font-size: 2rem;

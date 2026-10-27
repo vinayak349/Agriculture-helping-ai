@@ -25,33 +25,27 @@
     </div>
 </section>
 
-<!-- Quick Stats -->
-<section class="py-4 bg-light">
-    <div class="container">
-        <div class="row text-center">
-            <div class="col-md-3 col-6 mb-3">
-                <div class="stat-item">
-                    <h3 class="text-success mb-1">25,000+</h3>
-                    <small class="text-muted">Active Farmers</small>
-                </div>
+<!-- Philosophy Banner -->
+<section class="farmer-philosophy-banner">
+    <div class="container text-center">
+        <div class="philosophy-badge">
+            <i class="fas fa-seedling"></i>Our Community Philosophy
+        </div>
+        <h2 class="philosophy-title">
+            From Shared Experiences to <span class="text-gradient-green">Better Farming</span>
+        </h2>
+        <p class="philosophy-subtitle">
+            Connecting growers across regions to exchange field-tested insights, real challenges, and sustainable solutions.
+        </p>
+        <div class="philosophy-pillars">
+            <div class="philosophy-pillar-item">
+                <i class="fas fa-check-circle"></i>Peer-to-Peer Wisdom
             </div>
-            <div class="col-md-3 col-6 mb-3">
-                <div class="stat-item">
-                    <h3 class="text-primary mb-1">15,000+</h3>
-                    <small class="text-muted">Questions Answered</small>
-                </div>
+            <div class="philosophy-pillar-item">
+                <i class="fas fa-comments"></i>Collaborative Learning
             </div>
-            <div class="col-md-3 col-6 mb-3">
-                <div class="stat-item">
-                    <h3 class="text-warning mb-1">500+</h3>
-                    <small class="text-muted">Expert Advisors</small>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 mb-3">
-                <div class="stat-item">
-                    <h3 class="text-info mb-1">50+</h3>
-                    <small class="text-muted">States Covered</small>
-                </div>
+            <div class="philosophy-pillar-item">
+                <i class="fas fa-chart-line"></i>Sustainable Growth
             </div>
         </div>
     </div>
@@ -309,7 +303,7 @@ function displayRecentPosts(posts) {
                             <i class="fas fa-map-marker-alt me-1"></i>${post.location}
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="badge bg-${statusBadge}">${post.status}</span>
+                            <span class="badge badge-status badge-status-${post.status}">${post.status}</span>
                             <small class="text-muted">${post.responses} responses</small>
                         </div>
                     </div>

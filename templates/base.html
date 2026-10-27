@@ -12,7 +12,47 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}?v=1.3" rel="stylesheet">
+    <style>
+        .navbar-nav .nav-link.nav-register-btn:hover,
+        .navbar-nav .nav-link.nav-register-btn:focus {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            background: linear-gradient(135deg, #15803d 0%, #14532d 100%) !important;
+            box-shadow: 0 6px 18px rgba(22, 163, 74, 0.4) !important;
+        }
+        .navbar-nav .nav-link.nav-register-btn:hover i,
+        .navbar-nav .nav-link.nav-register-btn:focus i {
+            color: #ffffff !important;
+        }
+        .badge-status,
+        .badge-status-answered {
+            background-color: #dcfce7 !important;
+            color: #0f3d24 !important;
+            border: 1px solid #86efac !important;
+            font-weight: 700 !important;
+            font-size: 0.82rem !important;
+            padding: 0.35rem 0.75rem !important;
+            border-radius: 50px !important;
+            text-transform: capitalize !important;
+            letter-spacing: 0.2px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+        .badge-status-pending,
+        .badge-status-unanswered {
+            background-color: #fef3c7 !important;
+            color: #78350f !important;
+            border: 1px solid #fde68a !important;
+            font-weight: 700 !important;
+            font-size: 0.82rem !important;
+            padding: 0.35rem 0.75rem !important;
+            border-radius: 50px !important;
+            text-transform: capitalize !important;
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+    </style>
     
     {% block extra_head %}{% endblock %}
 </head>
@@ -164,7 +204,7 @@
                     <h6 class="footer-subtitle">Contact Info</h6>
                     <div class="contact-info">
                         <p><i class="fas fa-map-marker-alt"></i> 123 Agriculture St, Farm City</p>
-                        <p><i class="fas fa-phone"></i> +91 98765 43210</p>
+                        <p><i class="fas fa-phone"></i> +91 93xxxxxxxx</p>
                         <p><i class="fas fa-envelope"></i> info@agrisenseai.com</p>
                     </div>
                 </div>

@@ -124,11 +124,11 @@
 {% block extra_scripts %}
 <script>
 const TYPE_CONFIG = {
-    'Yield Prediction':         { icon: 'fas fa-chart-line',   color: '#4a6741' },
-    'Disease Prediction':       { icon: 'fas fa-bug',          color: '#b5342a' },
-    'Fertilizer Recommendation':{ icon: 'fas fa-flask',        color: '#c48a1a' },
-    'Weather Prediction':       { icon: 'fas fa-cloud-sun',    color: '#3b7cb8' },
-    'Crop Recommendation':      { icon: 'fas fa-search-plus',  color: '#6b8f71' }
+    'Yield Prediction':         { icon: 'fas fa-chart-line',   color: '#16a34a' },
+    'Disease Prediction':       { icon: 'fas fa-bug',          color: '#ef4444' },
+    'Fertilizer Recommendation':{ icon: 'fas fa-flask',        color: '#f59e0b' },
+    'Weather Prediction':       { icon: 'fas fa-cloud-sun',    color: '#0284c7' },
+    'Crop Recommendation':      { icon: 'fas fa-search-plus',  color: '#0d9488' }
 };
 
 const LABEL_MAP = {
@@ -145,7 +145,7 @@ const LABEL_MAP = {
 };
 
 function showPredictionDetails(type, inputRaw, result, date) {
-    const cfg = TYPE_CONFIG[type] || { icon: 'fas fa-info-circle', color: '#6b8f71' };
+    const cfg = TYPE_CONFIG[type] || { icon: 'fas fa-info-circle', color: '#16a34a' };
 
     document.getElementById('modalIcon').innerHTML = '<i class="' + cfg.icon + '"></i>';
     document.getElementById('modalIcon').style.background = cfg.color;

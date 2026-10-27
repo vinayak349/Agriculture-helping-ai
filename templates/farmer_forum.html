@@ -53,9 +53,9 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Recent Discussions</h5>
-                        <button class="btn btn-primary btn-sm" onclick="location.href='{{ url_for('farmer_connect') }}#ask-question'">
+                        <a href="{{ url_for('farmer_connect') }}#ask-question" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus me-1"></i>Ask Question
-                        </button>
+                        </a>
                     </div>
                     <div class="card-body" id="forum-posts">
                         <!-- Posts loaded via JavaScript -->
@@ -88,7 +88,6 @@ function displayForumPosts(posts) {
     let html = '';
     
     posts.forEach(post => {
-        const statusClass = post.status === 'answered' ? 'success' : 'warning';
         html += `
             <div class="border-bottom pb-3 mb-3">
                 <div class="d-flex justify-content-between align-items-start">
@@ -116,7 +115,7 @@ function displayForumPosts(posts) {
                             </small>
                         </div>
                     </div>
-                    <span class="badge bg-${statusClass}">${post.status}</span>
+                    <span class="badge badge-status badge-status-${post.status}">${post.status}</span>
                 </div>
             </div>
         `;
