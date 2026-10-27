@@ -1,4 +1,4 @@
-// Main JavaScript for SmartFarm AI
+// Main JavaScript for AgriSense AI
 document.addEventListener('DOMContentLoaded', function() {
     // Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {

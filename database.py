@@ -68,11 +68,11 @@ def init_db():
 
     # Create default admin if not exists
     admin = cursor.execute('SELECT id FROM users WHERE email = ? OR username = ?',
-                           ('admin@smartfarmai.com', 'admin')).fetchone()
+                           ('admin@agrisenseai.com', 'admin')).fetchone()
     if not admin:
         cursor.execute(
             'INSERT INTO users (username, email, password_hash, role, full_name) VALUES (?, ?, ?, ?, ?)',
-            ('admin', 'admin@smartfarmai.com',
+            ('admin', 'admin@agrisenseai.com',
              generate_password_hash('admin123'), 'admin', 'Administrator')
         )
 

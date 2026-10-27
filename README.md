@@ -1,6 +1,6 @@
-# SmartFarm AI - Intelligent Agricultural Advisory System
+# AgriSense AI - Intelligent Agricultural Advisory System
 
-A full-featured Flask web application that provides AI-powered agricultural advisory services. SmartFarm AI combines machine learning, deep learning image recognition, and community features to help farmers make data-driven decisions about crop selection, yield optimization, disease management, and more.
+A full-featured Flask web application that provides AI-powered agricultural advisory services. AgriSense AI combines machine learning, deep learning image recognition, and community features to help farmers make data-driven decisions about crop selection, yield optimization, disease management, and more.
 
 ## Features
 
@@ -47,7 +47,7 @@ A full-featured Flask web application that provides AI-powered agricultural advi
 ## Project Structure
 
 ```
-SmartFarm-AI/
+AgriSense-AI/
 ├── app.py                          # Main Flask application
 ├── database.py                     # SQLite database initialization & CRUD
 ├── requirements.txt                # Python dependencies
@@ -114,7 +114,7 @@ SmartFarm-AI/
 | `forum_posts` | Community forum questions with category and crop tags |
 | `marketplace_listings` | Buy/sell listings with item details and location |
 
-Default admin account: `admin@smartfarmai.com` / `admin123`
+Default admin account: `admin@agrisenseai.com` / `admin123`
 
 ## API Endpoints
 
@@ -137,8 +137,8 @@ Default admin account: `admin@smartfarmai.com` / `admin123`
 ### 1. Clone and install
 
 ```bash
-git clone <repository_url>
-cd SmartFarm-AI
+git clone https://github.com/vinayak349/Agriculture-helping-ai.git
+cd Agriculture-helping-ai
 python -m venv venv
 source venv/bin/activate    # macOS/Linux
 # .\venv\Scripts\activate   # Windows

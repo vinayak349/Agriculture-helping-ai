@@ -1,5 +1,5 @@
 """
-SmartFarm AI Models Package
+AgriSense AI Models Package
 
 This package contains all the machine learning models and prediction logic
 for the agricultural prediction system.
@@ -8,7 +8,7 @@ for the agricultural prediction system.
 from .prediction_models import PredictionModels
 
 __version__ = "1.0.0"
-__author__ = "SmartFarm AI Team"
+__author__ = "AgriSense AI Team"
 
 # Model metadata
 MODEL_INFO = {

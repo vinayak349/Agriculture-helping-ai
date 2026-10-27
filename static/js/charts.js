@@ -1,4 +1,4 @@
-// Charts and Data Visualization for SmartFarm AI
+// Charts and Data Visualization for AgriSense AI
 class AgriCharts {
     constructor() {
         this.chartColors = {
