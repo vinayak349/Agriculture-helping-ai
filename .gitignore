@@ -1,0 +1,23 @@
+# Large raw image training datasets
+dataset/Agricultural-crops-dataset/
+dataset/Plant Diseas/
+
+# Virtual Environment
+venv/
+env/
+.venv/
+ENV/
+
+# Python cache & bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor settings
+.vscode/
+.idea/

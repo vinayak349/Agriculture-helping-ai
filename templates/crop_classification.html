@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}Crop Classification - SmartFarm AI{% endblock %}
+
+{% block content %}
+<section class="prediction-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="prediction-card">
+                    <div class="text-center mb-4">
+                        <h2 class="text-plant-primary">
+                            <i class="fas fa-camera me-3"></i>Crop Classification
+                        </h2>
+                        <p class="text-muted">Upload a photograph of a crop plant to identify it using AI</p>
+                    </div>
+
+                    <!-- Upload Area -->
+                    <div id="crop-upload-area" class="upload-zone text-center p-5 mb-4">
+                        <div id="crop-upload-placeholder">
+                            <i class="fas fa-cloud-upload-alt fa-4x text-success mb-3"></i>
+                            <h5>Drag & Drop or Click to Upload</h5>
+                            <p class="text-muted">Supports JPG, JPEG, PNG, WEBP (Max 16MB)</p>
+                            <button type="button" class="btn btn-outline-success mt-2" onclick="document.getElementById('crop-file-input').click();">
+                                <i class="fas fa-folder-open me-2"></i>Browse Files
+                            </button>
+                        </div>
+                        <div id="crop-preview-container" style="display: none;">
+                            <img id="crop-preview-img" src="" alt="Preview" class="img-fluid rounded shadow" style="max-height: 300px;">
+                            <p class="mt-2 text-muted" id="crop-file-name"></p>
+                            <button type="button" class="btn btn-sm btn-outline-danger mt-2" onclick="resetCropUpload()">
+                                <i class="fas fa-times me-1"></i>Remove
+                            </button>
+                        </div>
+                        <input type="file" id="crop-file-input" accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Tip:</strong> Upload a clear photo of the crop plant (leaves, stems, or full plant).
+                        Our AI can identify 30 different crop types including Rice, Wheat, Cotton, Sugarcane, and more.
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="button" id="crop-classify-btn" class="btn btn-success btn-lg" disabled onclick="classifyCrop()">
+                            <i class="fas fa-search me-2"></i>Identify Crop
+                        </button>
+                    </div>
+
+                    <!-- Loading indicator -->
+                    <div id="crop-classify-loading" class="text-center mt-4" style="display: none;">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Analyzing plant image...</p>
+                    </div>
+
+                    <!-- Result container -->
+                    <div id="crop-classify-result" class="mt-4" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Supported Crops Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center mb-4">
+                <h3 class="text-plant-primary">30 Crops We Can Identify</h3>
+                <p class="text-muted">Our AI model is trained on a diverse dataset of agricultural crop images</p>
+            </div>
+        </div>
+        <div class="row">
+            {% for crop in crops_list %}
+            <div class="col-lg-2 col-md-3 col-4 mb-3">
+                <div class="card border-0 shadow-sm text-center p-2 h-100">
+                    <i class="fas fa-seedling text-success mb-1"></i>
+                    <small>{{ crop }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Crop Classification Upload Logic
+const cropUploadArea = document.getElementById('crop-upload-area');
+const cropFileInput = document.getElementById('crop-file-input');
+const cropPlaceholder = document.getElementById('crop-upload-placeholder');
+const cropPreviewContainer = document.getElementById('crop-preview-container');
+const cropPreviewImg = document.getElementById('crop-preview-img');
+const cropFileName = document.getElementById('crop-file-name');
+const cropClassifyBtn = document.getElementById('crop-classify-btn');
+let cropSelectedFile = null;
+
+// Drag and drop
+cropUploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    cropUploadArea.classList.add('drag-over');
+});
+cropUploadArea.addEventListener('dragleave', () => {
+    cropUploadArea.classList.remove('drag-over');
+});
+cropUploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    cropUploadArea.classList.remove('drag-over');
+    if (e.dataTransfer.files.length) handleCropFile(e.dataTransfer.files[0]);
+});
+cropUploadArea.addEventListener('click', (e) => {
+    if (e.target.tagName !== 'BUTTON' && !e.target.closest('button')) cropFileInput.click();
+});
+cropFileInput.addEventListener('change', (e) => {
+    if (e.target.files.length) handleCropFile(e.target.files[0]);
+});
+
+function handleCropFile(file) {
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+        alert('Please upload a valid image file (JPG, JPEG, PNG, or WEBP)');
+        return;
+    }
+    cropSelectedFile = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        cropPreviewImg.src = e.target.result;
+        cropFileName.textContent = file.name;
+        cropPlaceholder.style.display = 'none';
+        cropPreviewContainer.style.display = 'block';
+        cropClassifyBtn.disabled = false;
+    };
+    reader.readAsDataURL(file);
+}
+
+function resetCropUpload() {
+    cropSelectedFile = null;
+    cropFileInput.value = '';
+    cropPlaceholder.style.display = 'block';
+    cropPreviewContainer.style.display = 'none';
+    cropClassifyBtn.disabled = true;
+    document.getElementById('crop-classify-result').style.display = 'none';
+}
+
+async function classifyCrop() {
+    if (!cropSelectedFile) return;
+
+    cropClassifyBtn.disabled = true;
+    document.getElementById('crop-classify-loading').style.display = 'block';
+    document.getElementById('crop-classify-result').style.display = 'none';
+
+    const formData = new FormData();
+    formData.append('file', cropSelectedFile);
+
+    try {
+        const response = await fetch('/api/classify-crop', { method: 'POST', body: formData });
+        const data = await response.json();
+        const resultDiv = document.getElementById('crop-classify-result');
+
+        if (data.prediction) {
+            const statusClass = data.is_confident ? 'success' : 'warning';
+            const confidenceNote = data.is_confident ? '' : '<p class="text-warning"><i class="fas fa-exclamation-triangle me-1"></i>Low confidence - try uploading a clearer image.</p>';
+
+            let html = `
+                <div class="alert alert-${statusClass}">
+                    <h5><i class="fas fa-check-circle me-2"></i>Crop Identified</h5>
+                    <hr>
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h3 class="mb-2">${data.prediction}</h3>
+                            <p><strong>Confidence:</strong> ${data.confidence}%</p>
+                            <div class="progress mb-3" style="height: 25px;">
+                                <div class="progress-bar bg-${statusClass}" style="width: ${data.confidence}%">${data.confidence}%</div>
+                            </div>
+                            ${confidenceNote}
+                        </div>
+                    </div>`;
+
+            if (data.top_predictions && data.top_predictions.length > 1) {
+                html += `<h6 class="mt-3">Other Possibilities:</h6>
+                    <div class="row">`;
+                data.top_predictions.slice(1).forEach(p => {
+                    html += `
+                        <div class="col-md-6 mb-2">
+                            <div class="d-flex justify-content-between align-items-center p-2 bg-light rounded">
+                                <span>${p.label}</span>
+                                <span class="badge bg-secondary">${p.confidence}%</span>
+                            </div>
+                        </div>`;
+                });
+                html += `</div>`;
+            }
+
+            html += `</div>`;
+            resultDiv.innerHTML = html;
+        } else {
+            resultDiv.innerHTML = `<div class="alert alert-danger"><i class="fas fa-times-circle me-2"></i>${data.error || 'Failed to classify the image.'}</div>`;
+        }
+
+        resultDiv.style.display = 'block';
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch (error) {
+        const resultDiv = document.getElementById('crop-classify-result');
+        resultDiv.innerHTML = `<div class="alert alert-danger"><i class="fas fa-times-circle me-2"></i>Error: ${error.message}</div>`;
+        resultDiv.style.display = 'block';
+    }
+
+    document.getElementById('crop-classify-loading').style.display = 'none';
+    cropClassifyBtn.disabled = false;
+}
+</script>
+{% endblock %}

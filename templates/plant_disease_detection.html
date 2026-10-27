@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}Plant Disease Detection - SmartFarm AI{% endblock %}
+
+{% block content %}
+<section class="prediction-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="prediction-card">
+                    <div class="text-center mb-4">
+                        <h2 class="text-plant-primary">
+                            <i class="fas fa-leaf me-3"></i>Plant Disease Detection
+                        </h2>
+                        <p class="text-muted">Upload a photo of your plant leaf to detect diseases using AI</p>
+                    </div>
+
+                    <!-- Upload Area -->
+                    <div id="disease-upload-area" class="upload-zone text-center p-5 mb-4">
+                        <div id="disease-upload-placeholder">
+                            <i class="fas fa-cloud-upload-alt fa-4x text-success mb-3"></i>
+                            <h5>Drag & Drop or Click to Upload</h5>
+                            <p class="text-muted">Supports JPG, JPEG, PNG, WEBP (Max 16MB)</p>
+                            <button type="button" class="btn btn-outline-success mt-2" onclick="document.getElementById('disease-file-input').click();">
+                                <i class="fas fa-folder-open me-2"></i>Browse Files
+                            </button>
+                        </div>
+                        <div id="disease-preview-container" style="display: none;">
+                            <img id="disease-preview-img" src="" alt="Preview" class="img-fluid rounded shadow" style="max-height: 300px;">
+                            <p class="mt-2 text-muted" id="disease-file-name"></p>
+                            <button type="button" class="btn btn-sm btn-outline-danger mt-2" onclick="resetDiseaseUpload()">
+                                <i class="fas fa-times me-1"></i>Remove
+                            </button>
+                        </div>
+                        <input type="file" id="disease-file-input" accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Supported Plants:</strong> Apple, Cherry, Corn, Grape, Peach, Pepper, Potato, Strawberry, and Tomato.
+                        Upload a clear photo of the affected leaf for best results.
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="button" id="disease-detect-btn" class="btn btn-success btn-lg" disabled onclick="detectPlantDisease()">
+                            <i class="fas fa-search-plus me-2"></i>Detect Disease
+                        </button>
+                    </div>
+
+                    <!-- Loading indicator -->
+                    <div id="disease-detect-loading" class="text-center mt-4" style="display: none;">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Analyzing leaf image for diseases...</p>
+                    </div>
+
+                    <!-- Result container -->
+                    <div id="disease-detect-result" class="mt-4" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Supported Plants Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center mb-4">
+                <h3 class="text-plant-primary">Detectable Plant Diseases</h3>
+                <p class="text-muted">Our AI can detect 33 different conditions across 9 plant species</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-3">
+                    <i class="fas fa-apple-alt fa-2x text-danger mb-2"></i>
+                    <h6>Apple</h6>
+                    <small class="text-muted">Scab, Black Rot, Cedar Rust</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-3">
+                    <i class="fas fa-leaf fa-2x text-success mb-2"></i>
+                    <h6>Tomato</h6>
+                    <small class="text-muted">8 diseases detected</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-3">
+                    <i class="fas fa-seedling fa-2x text-warning mb-2"></i>
+                    <h6>Corn</h6>
+                    <small class="text-muted">Gray Leaf Spot, Rust, Blight</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-3">
+                    <i class="fas fa-wine-glass-alt fa-2x text-purple mb-2" style="color: #6f42c1;"></i>
+                    <h6>Grape</h6>
+                    <small class="text-muted">Black Rot, Esca, Leaf Blight</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-3">
+                    <i class="fas fa-carrot fa-2x text-info mb-2"></i>
+                    <h6>Potato</h6>
+                    <small class="text-muted">Early & Late Blight</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-3">
+                    <i class="fas fa-pepper-hot fa-2x text-danger mb-2"></i>
+                    <h6>Pepper</h6>
+                    <small class="text-muted">Bacterial Spot</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-3">
+                    <i class="fas fa-lemon fa-2x text-warning mb-2"></i>
+                    <h6>Peach</h6>
+                    <small class="text-muted">Bacterial Spot</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card h-100 border-0 shadow-sm text-center p-3">
+                    <i class="fas fa-leaf fa-2x text-danger mb-2"></i>
+                    <h6>Cherry & Strawberry</h6>
+                    <small class="text-muted">Powdery Mildew, Leaf Scorch</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Disease Detection Upload Logic
+const diseaseUploadArea = document.getElementById('disease-upload-area');
+const diseaseFileInput = document.getElementById('disease-file-input');
+const diseasePlaceholder = document.getElementById('disease-upload-placeholder');
+const diseasePreviewContainer = document.getElementById('disease-preview-container');
+const diseasePreviewImg = document.getElementById('disease-preview-img');
+const diseaseFileName = document.getElementById('disease-file-name');
+const diseaseDetectBtn = document.getElementById('disease-detect-btn');
+let diseaseSelectedFile = null;
+
+// Drag and drop
+diseaseUploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    diseaseUploadArea.classList.add('drag-over');
+});
+diseaseUploadArea.addEventListener('dragleave', () => {
+    diseaseUploadArea.classList.remove('drag-over');
+});
+diseaseUploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    diseaseUploadArea.classList.remove('drag-over');
+    if (e.dataTransfer.files.length) handleDiseaseFile(e.dataTransfer.files[0]);
+});
+diseaseUploadArea.addEventListener('click', (e) => {
+    if (e.target.tagName !== 'BUTTON' && !e.target.closest('button')) diseaseFileInput.click();
+});
+diseaseFileInput.addEventListener('change', (e) => {
+    if (e.target.files.length) handleDiseaseFile(e.target.files[0]);
+});
+
+function handleDiseaseFile(file) {
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+        alert('Please upload a valid image file (JPG, JPEG, PNG, or WEBP)');
+        return;
+    }
+    diseaseSelectedFile = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        diseasePreviewImg.src = e.target.result;
+        diseaseFileName.textContent = file.name;
+        diseasePlaceholder.style.display = 'none';
+        diseasePreviewContainer.style.display = 'block';
+        diseaseDetectBtn.disabled = false;
+    };
+    reader.readAsDataURL(file);
+}
+
+function resetDiseaseUpload() {
+    diseaseSelectedFile = null;
+    diseaseFileInput.value = '';
+    diseasePlaceholder.style.display = 'block';
+    diseasePreviewContainer.style.display = 'none';
+    diseaseDetectBtn.disabled = true;
+    document.getElementById('disease-detect-result').style.display = 'none';
+}
+
+async function detectPlantDisease() {
+    if (!diseaseSelectedFile) return;
+
+    diseaseDetectBtn.disabled = true;
+    document.getElementById('disease-detect-loading').style.display = 'block';
+    document.getElementById('disease-detect-result').style.display = 'none';
+
+    const formData = new FormData();
+    formData.append('file', diseaseSelectedFile);
+
+    try {
+        const response = await fetch('/api/detect-plant-disease', { method: 'POST', body: formData });
+        const data = await response.json();
+        const resultDiv = document.getElementById('disease-detect-result');
+
+        if (data.prediction) {
+            const statusClass = data.is_healthy ? 'success' : (data.confidence >= 80 ? 'danger' : 'warning');
+            const statusIcon = data.is_healthy ? 'check-circle' : 'exclamation-triangle';
+            const statusText = data.is_healthy ? 'Healthy Plant' : 'Disease Detected';
+
+            let html = `
+                <div class="alert alert-${statusClass}">
+                    <h5><i class="fas fa-${statusIcon} me-2"></i>${statusText}</h5>
+                    <hr>
+                    <p><strong>Diagnosis:</strong> ${data.prediction}</p>
+                    <p><strong>Confidence:</strong> ${data.confidence}%</p>
+                    <div class="progress mb-3" style="height: 25px;">
+                        <div class="progress-bar bg-${statusClass}" style="width: ${data.confidence}%">${data.confidence}%</div>
+                    </div>`;
+
+            if (data.top_predictions && data.top_predictions.length > 1) {
+                html += `<h6 class="mt-3">Other Possibilities:</h6><ul>`;
+                data.top_predictions.slice(1).forEach(p => {
+                    html += `<li>${p.label} - ${p.confidence}%</li>`;
+                });
+                html += `</ul>`;
+            }
+
+            if (!data.is_healthy) {
+                html += `
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <h6><i class="fas fa-lightbulb text-warning me-2"></i>Recommendations:</h6>
+                        <ul class="mb-0">
+                            <li>Remove and destroy severely infected leaves</li>
+                            <li>Apply appropriate fungicide or pesticide treatment</li>
+                            <li>Ensure proper spacing between plants for air circulation</li>
+                            <li>Consult a local agricultural expert for specific treatment</li>
+                        </ul>
+                    </div>`;
+            }
+            html += `</div>`;
+            resultDiv.innerHTML = html;
+        } else {
+            resultDiv.innerHTML = `<div class="alert alert-danger"><i class="fas fa-times-circle me-2"></i>${data.error || 'Failed to analyze the image.'}</div>`;
+        }
+
+        resultDiv.style.display = 'block';
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch (error) {
+        const resultDiv = document.getElementById('disease-detect-result');
+        resultDiv.innerHTML = `<div class="alert alert-danger"><i class="fas fa-times-circle me-2"></i>Error: ${error.message}</div>`;
+        resultDiv.style.display = 'block';
+    }
+
+    document.getElementById('disease-detect-loading').style.display = 'none';
+    diseaseDetectBtn.disabled = false;
+}
+</script>
+{% endblock %}
