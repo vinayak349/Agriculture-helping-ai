@@ -1,197 +1,910 @@
 {% extends "base.html" %}
 
-{% block title %}Expert Advice - Agricultural Experts{% endblock %}
+{% block title %}Expert Advice - Agricultural Specialists | AgriSense AI{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ==========================================================================
+       AgriSense AI - Expert Advisory Section Redesign
+       Premium Agricultural Precision Styling
+       ========================================================================== */
+    
+    .expert-hero-banner {
+        background: radial-gradient(circle at 50% 0%, rgba(34, 197, 94, 0.08) 0%, transparent 70%);
+        padding: 1.5rem 0 2rem;
+    }
+
+    .expert-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #ecfdf5;
+        color: #065f46;
+        border: 1px solid #a7f3d0;
+        padding: 0.4rem 1rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.12);
+    }
+
+    .expert-title {
+        font-size: 2.35rem;
+        font-weight: 800;
+        color: #0f291e;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.75rem;
+    }
+
+    .expert-title .text-gradient-primary {
+        background: linear-gradient(135deg, #15803d 0%, #0d9488 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .expert-subtitle {
+        font-size: 1.05rem;
+        color: #476355;
+        max-width: 680px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    /* --------------------------------------------------------------------------
+       Category Cards (Crop Scientists, Soil Experts, Plant Protection)
+       -------------------------------------------------------------------------- */
+    .expert-category-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 2rem 1.75rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+        border: 1.5px solid #e2ece4;
+        box-shadow: 0 10px 30px rgba(15, 41, 30, 0.05);
+        transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+                    border-color 0.32s ease;
+    }
+
+    /* Ambient Corner Glow Effect */
+    .expert-category-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 140px;
+        height: 140px;
+        pointer-events: none;
+        border-radius: 50%;
+        opacity: 0.75;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Top Accent Line */
+    .expert-category-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        transition: height 0.25s ease;
+    }
+
+    .expert-category-card:hover {
+        transform: translateY(-8px);
+    }
+
+    .expert-category-card:hover::after {
+        height: 5px;
+    }
+
+    .expert-category-card:hover::before {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+
+    /* --- Category 1: Crop Scientists Theme --- */
+    .card-crop {
+        --theme-primary: #10b981;
+        --theme-gradient: linear-gradient(135deg, #10b981 0%, #047857 100%);
+        --theme-bg: #ecfdf5;
+        --theme-text: #065f46;
+        --theme-border: #a7f3d0;
+        --theme-glow: rgba(16, 185, 129, 0.22);
+    }
+    .card-crop::after { background: var(--theme-gradient); }
+    .card-crop::before { background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%); }
+    .card-crop:hover {
+        border-color: #86efac;
+        box-shadow: 0 20px 42px -10px rgba(15, 41, 30, 0.1), 0 0 25px var(--theme-glow);
+    }
+
+    /* --- Category 2: Soil Experts Theme --- */
+    .card-soil {
+        --theme-primary: #0d9488;
+        --theme-gradient: linear-gradient(135deg, #0d9488 0%, #0369a1 100%);
+        --theme-bg: #f0fdfa;
+        --theme-text: #115e59;
+        --theme-border: #99f6e4;
+        --theme-glow: rgba(13, 148, 136, 0.22);
+    }
+    .card-soil::after { background: var(--theme-gradient); }
+    .card-soil::before { background: radial-gradient(circle, rgba(13, 148, 136, 0.15) 0%, transparent 70%); }
+    .card-soil:hover {
+        border-color: #5eead4;
+        box-shadow: 0 20px 42px -10px rgba(15, 41, 30, 0.1), 0 0 25px var(--theme-glow);
+    }
+
+    /* --- Category 3: Plant Protection Theme --- */
+    .card-protection {
+        --theme-primary: #f59e0b;
+        --theme-gradient: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+        --theme-bg: #fffbeb;
+        --theme-text: #92400e;
+        --theme-border: #fde68a;
+        --theme-glow: rgba(245, 158, 11, 0.22);
+    }
+    .card-protection::after { background: var(--theme-gradient); }
+    .card-protection::before { background: radial-gradient(circle, rgba(245, 158, 11, 0.16) 0%, transparent 70%); }
+    .card-protection:hover {
+        border-color: #fcd34d;
+        box-shadow: 0 20px 42px -10px rgba(15, 41, 30, 0.1), 0 0 25px var(--theme-glow);
+    }
+
+    /* Top Card Row: Squircle Icon & Live Status */
+    .card-top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.35rem;
+    }
+
+    .expert-icon-squircle {
+        width: 58px;
+        height: 58px;
+        border-radius: 16px;
+        background: var(--theme-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-size: 1.45rem;
+        box-shadow: 0 8px 18px var(--theme-glow);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .expert-category-card:hover .expert-icon-squircle {
+        transform: scale(1.08) rotate(-2deg);
+    }
+
+    .live-status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        background: var(--theme-bg);
+        color: var(--theme-text);
+        border: 1px solid var(--theme-border);
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 0.35rem 0.75rem;
+        border-radius: 50px;
+        letter-spacing: 0.2px;
+    }
+
+    .pulse-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background-color: var(--theme-primary);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        animation: pulseEffect 2s infinite;
+    }
+
+    @keyframes pulseEffect {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 var(--theme-glow); }
+        70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(0, 0, 0, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+    }
+
+    /* Card Content */
+    .card-category-title {
+        font-size: 1.38rem;
+        font-weight: 700;
+        color: #0f291e;
+        margin-bottom: 0.3rem;
+        transition: color 0.2s ease;
+    }
+
+    .card-category-subtitle {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--theme-text);
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        margin-bottom: 0.85rem;
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    .card-category-desc {
+        font-size: 0.92rem;
+        color: #476355;
+        line-height: 1.55;
+        margin-bottom: 1.25rem;
+        flex-grow: 1;
+    }
+
+    /* Tags / Specializations Chips */
+    .specialty-tags-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        margin-bottom: 1.35rem;
+    }
+
+    .spec-tag {
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 0.3rem 0.65rem;
+        border-radius: 8px;
+        background: var(--theme-bg);
+        color: var(--theme-text);
+        border: 1px solid var(--theme-border);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    .spec-tag:hover {
+        transform: translateY(-1px);
+        filter: brightness(0.97);
+    }
+
+    .spec-tag i {
+        font-size: 0.72rem;
+        opacity: 0.85;
+    }
+
+    /* Mini SLA Metrics Strip */
+    .card-metrics-strip {
+        background: #f8faf8;
+        border: 1px solid #edf2ee;
+        border-radius: 12px;
+        padding: 0.65rem 0.85rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .metric-item {
+        text-align: center;
+        flex: 1;
+    }
+
+    .metric-val {
+        display: block;
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: #0f291e;
+        line-height: 1.2;
+    }
+
+    .metric-lbl {
+        display: block;
+        font-size: 0.72rem;
+        color: #6b8276;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        margin-top: 0.15rem;
+    }
+
+    .metric-divider {
+        width: 1px;
+        height: 24px;
+        background: #e2ece4;
+    }
+
+    /* Consultation Buttons */
+    .btn-consult-category {
+        width: 100%;
+        padding: 0.82rem 1.25rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #ffffff;
+        background: var(--theme-gradient);
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 14px var(--theme-glow);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn-consult-category:hover,
+    .btn-consult-category:focus {
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px var(--theme-glow);
+        filter: brightness(1.04);
+    }
+
+    .btn-consult-category i.btn-arrow {
+        transition: transform 0.2s ease;
+    }
+
+    .btn-consult-category:hover i.btn-arrow {
+        transform: translateX(4px);
+    }
+
+    /* --------------------------------------------------------------------------
+       Featured Experts Cards Modernization
+       -------------------------------------------------------------------------- */
+    .featured-expert-card {
+        background: #ffffff;
+        border-radius: 18px;
+        border: 1px solid #e2ece4;
+        box-shadow: 0 6px 20px rgba(15, 41, 30, 0.04);
+        padding: 1.75rem 1.5rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        position: relative;
+    }
+
+    .featured-expert-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 32px rgba(15, 41, 30, 0.08);
+        border-color: #86efac;
+    }
+
+    .expert-avatar-wrap {
+        position: relative;
+        width: 82px;
+        height: 82px;
+        margin: 0 auto 1.25rem;
+    }
+
+    .expert-avatar-initials {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #ffffff;
+        box-shadow: 0 6px 16px rgba(15, 41, 30, 0.12);
+    }
+
+    .avatar-sharma { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
+    .avatar-patel { background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); }
+    .avatar-kumar { background: linear-gradient(135deg, #0d9488 0%, #0369a1 100%); }
+
+    .verified-expert-badge {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: #16a34a;
+        color: #ffffff;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.72rem;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+
+    .expert-name {
+        font-size: 1.18rem;
+        font-weight: 700;
+        color: #0f291e;
+        margin-bottom: 0.2rem;
+    }
+
+    .expert-designation {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #15803d;
+        margin-bottom: 0.65rem;
+    }
+
+    .expert-bio {
+        font-size: 0.88rem;
+        color: #476355;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+        flex-grow: 1;
+    }
+
+    /* --------------------------------------------------------------------------
+       Quick Consultation Form Card
+       -------------------------------------------------------------------------- */
+    .consultation-form-card {
+        background: #ffffff;
+        border-radius: 20px;
+        border: 1.5px solid #dcfce7;
+        box-shadow: 0 15px 40px rgba(22, 163, 74, 0.08);
+        overflow: hidden;
+        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .consultation-form-card.form-highlighted {
+        border-color: #16a34a;
+        box-shadow: 0 0 30px rgba(34, 197, 94, 0.35);
+        animation: highlightPulse 1.2s ease;
+    }
+
+    @keyframes highlightPulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.015); }
+        100% { transform: scale(1); }
+    }
+
+    .consultation-card-header {
+        background: linear-gradient(135deg, #15803d 0%, #0d9488 100%);
+        color: #ffffff;
+        padding: 1.75rem 2rem;
+        text-align: center;
+        position: relative;
+    }
+
+    .consultation-card-header h4 {
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+    }
+
+    .consultation-card-header p {
+        opacity: 0.9;
+        font-size: 0.92rem;
+        margin-bottom: 0;
+    }
+
+    .consultation-alert-banner {
+        background: #ecfdf5;
+        border: 1px solid #86efac;
+        color: #065f46;
+        border-radius: 12px;
+        padding: 0.85rem 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .consultation-alert-banner i {
+        font-size: 1.2rem;
+        color: #10b981;
+    }
+
+    .form-label-custom {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: #0f291e;
+        margin-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .form-control-custom,
+    .form-select-custom {
+        border-radius: 10px;
+        border: 1.5px solid #d1ded5;
+        padding: 0.72rem 1rem;
+        font-size: 0.93rem;
+        color: #0f291e;
+        background-color: #ffffff;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-control-custom:focus,
+    .form-select-custom:focus {
+        border-color: #16a34a;
+        box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.15);
+        outline: none;
+    }
+
+    .btn-submit-consultation {
+        background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        padding: 0.9rem 2.2rem;
+        font-weight: 700;
+        font-size: 1.02rem;
+        box-shadow: 0 6px 20px rgba(22, 163, 74, 0.3);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .btn-submit-consultation:hover,
+    .btn-submit-consultation:focus {
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(22, 163, 74, 0.4);
+        filter: brightness(1.05);
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <section class="py-5">
     <div class="container">
-        <div class="row text-center mb-5">
+        <!-- Section Header -->
+        <div class="row text-center mb-5 expert-hero-banner">
             <div class="col-lg-8 mx-auto">
-                <h2 class="text-plant-primary">
-                    <i class="fas fa-user-graduate me-2"></i>Agricultural Experts
+                <div class="expert-kicker">
+                    <i class="fas fa-certificate text-success"></i>
+                    <span>Certified Agricultural Advisory Network</span>
+                </div>
+                <h2 class="expert-title">
+                    Agricultural <span class="text-gradient-primary">Experts & Specialists</span>
                 </h2>
-                <p class="text-muted">Get professional guidance from certified agricultural experts</p>
+                <p class="expert-subtitle">
+                    Connect directly with certified agronomists, soil chemists, and plant pathologists for science-backed guidance, diagnostic support, and field solutions.
+                </p>
             </div>
         </div>
         
-        <!-- Expert Categories -->
+        <!-- Expert Categories: 3 Key Domain Blocks -->
+        <div class="row g-4 mb-5" id="expert-categories">
+            <!-- 1. Crop Scientists Block -->
+            <div class="col-lg-4 col-md-6">
+                <div class="expert-category-card card-crop h-100">
+                    <div class="card-top-row">
+                        <div class="expert-icon-squircle">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <div class="live-status-pill">
+                            <span class="pulse-dot"></span>
+                            <span>48 Active Agronomists</span>
+                        </div>
+                    </div>
+
+                    <h3 class="card-category-title">Crop Scientists</h3>
+                    <div class="card-category-subtitle">
+                        <i class="fas fa-dna"></i> Genetics & High-Yield Breeding
+                    </div>
+                    
+                    <p class="card-category-desc">
+                        Specialized in crop breeding, climate-resilient hybrid selection, varietal development, seed vigor enhancement, and physiological crop lifecycle optimization.
+                    </p>
+
+                    <!-- Focus Badges / Tags -->
+                    <div class="specialty-tags-wrapper">
+                        <span class="spec-tag"><i class="fas fa-seedling"></i> Plant Breeding</span>
+                        <span class="spec-tag"><i class="fas fa-dna"></i> Hybrid Genetics</span>
+                        <span class="spec-tag"><i class="fas fa-shield-alt"></i> Stress Tolerance</span>
+                        <span class="spec-tag"><i class="fas fa-chart-line"></i> Yield Vigor</span>
+                    </div>
+
+                    <!-- SLA / Metrics Strip -->
+                    <div class="card-metrics-strip">
+                        <div class="metric-item">
+                            <span class="metric-val">~3 Hours</span>
+                            <span class="metric-lbl">Avg Response</span>
+                        </div>
+                        <div class="metric-divider"></div>
+                        <div class="metric-item">
+                            <span class="metric-val">99.4%</span>
+                            <span class="metric-lbl">Resolution</span>
+                        </div>
+                        <div class="metric-divider"></div>
+                        <div class="metric-item">
+                            <span class="metric-val">⭐ 4.9</span>
+                            <span class="metric-lbl">Rating</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button type="button" class="btn-consult-category" onclick="selectExpertCategory('crop', 'Crop Management')">
+                        <span>Consult Crop Scientists</span>
+                        <i class="fas fa-arrow-right btn-arrow"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 2. Soil Experts Block -->
+            <div class="col-lg-4 col-md-6">
+                <div class="expert-category-card card-soil h-100">
+                    <div class="card-top-row">
+                        <div class="expert-icon-squircle">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <div class="live-status-pill">
+                            <span class="pulse-dot"></span>
+                            <span>36 Soil Chemists</span>
+                        </div>
+                    </div>
+
+                    <h3 class="card-category-title">Soil Experts</h3>
+                    <div class="card-category-subtitle">
+                        <i class="fas fa-flask"></i> Soil Health & Nutrition Management
+                    </div>
+                    
+                    <p class="card-category-desc">
+                        Specialized in comprehensive soil testing, NPK macronutrient balancing, micronutrient profiling, pH neutralization, organic carbon revival, and salinity remediation.
+                    </p>
+
+                    <!-- Focus Badges / Tags -->
+                    <div class="specialty-tags-wrapper">
+                        <span class="spec-tag"><i class="fas fa-vial"></i> Soil Testing</span>
+                        <span class="spec-tag"><i class="fas fa-balance-scale"></i> NPK Balancing</span>
+                        <span class="spec-tag"><i class="fas fa-tint"></i> pH Correction</span>
+                        <span class="spec-tag"><i class="fas fa-bacteria"></i> Microbiome</span>
+                    </div>
+
+                    <!-- SLA / Metrics Strip -->
+                    <div class="card-metrics-strip">
+                        <div class="metric-item">
+                            <span class="metric-val">~4 Hours</span>
+                            <span class="metric-lbl">Avg Response</span>
+                        </div>
+                        <div class="metric-divider"></div>
+                        <div class="metric-item">
+                            <span class="metric-val">98.8%</span>
+                            <span class="metric-lbl">Resolution</span>
+                        </div>
+                        <div class="metric-divider"></div>
+                        <div class="metric-item">
+                            <span class="metric-val">⭐ 4.8</span>
+                            <span class="metric-lbl">Rating</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button type="button" class="btn-consult-category" onclick="selectExpertCategory('soil', 'Soil & Nutrition')">
+                        <span>Consult Soil Experts</span>
+                        <i class="fas fa-arrow-right btn-arrow"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 3. Plant Protection Block -->
+            <div class="col-lg-4 col-md-12">
+                <div class="expert-category-card card-protection h-100">
+                    <div class="card-top-row">
+                        <div class="expert-icon-squircle">
+                            <i class="fas fa-shield-virus"></i>
+                        </div>
+                        <div class="live-status-pill">
+                            <span class="pulse-dot"></span>
+                            <span>52 Field Pathologists</span>
+                        </div>
+                    </div>
+
+                    <h3 class="card-category-title">Plant Protection</h3>
+                    <div class="card-category-subtitle">
+                        <i class="fas fa-bug"></i> Integrated Pest & Disease Control
+                    </div>
+                    
+                    <p class="card-category-desc">
+                        Specialized in rapid fungal blight diagnostics, viral outbreak containment, IPM biological controls, bio-fungicides, and safe precision pesticide spraying schedules.
+                    </p>
+
+                    <!-- Focus Badges / Tags -->
+                    <div class="specialty-tags-wrapper">
+                        <span class="spec-tag"><i class="fas fa-shield-alt"></i> IPM Protocols</span>
+                        <span class="spec-tag"><i class="fas fa-biohazard"></i> Blight & Rust</span>
+                        <span class="spec-tag"><i class="fas fa-spray-can"></i> Pest Control</span>
+                        <span class="spec-tag"><i class="fas fa-leaf"></i> Bio-Fungicides</span>
+                    </div>
+
+                    <!-- SLA / Metrics Strip -->
+                    <div class="card-metrics-strip">
+                        <div class="metric-item">
+                            <span class="metric-val">~2 Hours</span>
+                            <span class="metric-lbl">Avg Response</span>
+                        </div>
+                        <div class="metric-divider"></div>
+                        <div class="metric-item">
+                            <span class="metric-val">99.6%</span>
+                            <span class="metric-lbl">Resolution</span>
+                        </div>
+                        <div class="metric-divider"></div>
+                        <div class="metric-item">
+                            <span class="metric-val">⭐ 4.9</span>
+                            <span class="metric-lbl">Rating</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button type="button" class="btn-consult-category" onclick="selectExpertCategory('protection', 'Plant Protection')">
+                        <span>Consult Plant Protection</span>
+                        <i class="fas fa-arrow-right btn-arrow"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Featured Experts Section -->
         <div class="row mb-5">
-            <div class="col-md-4 mb-3">
-                <div class="card border-success h-100">
-                    <div class="card-header bg-success text-white text-center">
-                        <i class="fas fa-microscope fa-2x mb-2"></i>
-                        <h5>Crop Scientists</h5>
-                    </div>
-                    <div class="card-body text-center">
-                        <p>Specialized in crop breeding, genetics, and variety development</p>
-                        <div class="mb-3">
-                            <span class="badge bg-light text-dark me-1">Plant Breeding</span>
-                            <span class="badge bg-light text-dark me-1">Genetics</span>
-                            <span class="badge bg-light text-dark">Varieties</span>
+            <div class="col-12 mb-4 d-flex justify-content-between align-items-end flex-wrap gap-2">
+                <div>
+                    <h4 class="fw-bold text-dark mb-1">
+                        <i class="fas fa-award text-success me-2"></i>Featured Agritech Advisors
+                    </h4>
+                    <p class="text-muted mb-0 small">Direct one-on-one booking with senior scientists and field extension officers</p>
+                </div>
+                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill">
+                    <i class="fas fa-check-circle text-success me-1"></i>All Profiles Verified
+                </span>
+            </div>
+            
+            <!-- Expert 1 -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="featured-expert-card text-center">
+                    <div class="expert-avatar-wrap">
+                        <div class="expert-avatar-initials avatar-sharma">RS</div>
+                        <div class="verified-expert-badge" title="Verified ICAR Senior Agronomist">
+                            <i class="fas fa-check"></i>
                         </div>
-                        <button class="btn btn-success">Consult Now</button>
+                    </div>
+                    <h5 class="expert-name">Dr. Rajesh Sharma</h5>
+                    <div class="expert-designation">Senior Agronomist (ICAR Fellow)</div>
+                    <p class="expert-bio">25+ years experience in sustainable cropping systems, hybrid rice breeding, and climate-adaptive cultivation.</p>
+                    <div class="mb-3 d-flex justify-content-center gap-1 flex-wrap">
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1">Rice Expert</span>
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1">Organic Farming</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+                        <small class="text-muted fw-bold">⭐ 4.9 <span class="fw-normal text-secondary">(156 reviews)</span></small>
+                        <button class="btn btn-sm btn-outline-success rounded-pill px-3 fw-semibold">
+                            Book Session
+                        </button>
                     </div>
                 </div>
             </div>
             
-            <div class="col-md-4 mb-3">
-                <div class="card border-primary h-100">
-                    <div class="card-header bg-primary text-white text-center">
-                        <i class="fas fa-leaf fa-2x mb-2"></i>
-                        <h5>Soil Experts</h5>
-                    </div>
-                    <div class="card-body text-center">
-                        <p>Experts in soil health, nutrition management, and fertility</p>
-                        <div class="mb-3">
-                            <span class="badge bg-light text-dark me-1">Soil Testing</span>
-                            <span class="badge bg-light text-dark me-1">Fertility</span>
-                            <span class="badge bg-light text-dark">Nutrition</span>
+            <!-- Expert 2 -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="featured-expert-card text-center">
+                    <div class="expert-avatar-wrap">
+                        <div class="expert-avatar-initials avatar-patel">PP</div>
+                        <div class="verified-expert-badge" title="Verified Plant Pathologist">
+                            <i class="fas fa-check"></i>
                         </div>
-                        <button class="btn btn-primary">Consult Now</button>
+                    </div>
+                    <h5 class="expert-name">Dr. Priya Patel</h5>
+                    <div class="expert-designation">Lead Plant Pathologist</div>
+                    <p class="expert-bio">Specialist in fungal leaf blights, viral vector controls, and integrated biological pest management for horticultural crops.</p>
+                    <div class="mb-3 d-flex justify-content-center gap-1 flex-wrap">
+                        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-2 py-1">Plant Protection</span>
+                        <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2 py-1">IPM Specialist</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+                        <small class="text-muted fw-bold">⭐ 4.8 <span class="fw-normal text-secondary">(89 reviews)</span></small>
+                        <button class="btn btn-sm btn-outline-success rounded-pill px-3 fw-semibold">
+                            Book Session
+                        </button>
                     </div>
                 </div>
             </div>
             
-            <div class="col-md-4 mb-3">
-                <div class="card border-warning h-100">
-                    <div class="card-header bg-warning text-dark text-center">
-                        <i class="fas fa-bug fa-2x mb-2"></i>
-                        <h5>Plant Protection</h5>
-                    </div>
-                    <div class="card-body text-center">
-                        <p>Specialists in pest management and disease control</p>
-                        <div class="mb-3">
-                            <span class="badge bg-light text-dark me-1">IPM</span>
-                            <span class="badge bg-light text-dark me-1">Disease Control</span>
-                            <span class="badge bg-light text-dark">Pest Management</span>
+            <!-- Expert 3 -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="featured-expert-card text-center">
+                    <div class="expert-avatar-wrap">
+                        <div class="expert-avatar-initials avatar-kumar">SK</div>
+                        <div class="verified-expert-badge" title="Verified Soil Scientist">
+                            <i class="fas fa-check"></i>
                         </div>
-                        <button class="btn btn-warning">Consult Now</button>
+                    </div>
+                    <h5 class="expert-name">Dr. Suresh Kumar</h5>
+                    <div class="expert-designation">Chief Soil Scientist</div>
+                    <p class="expert-bio">Authority in soil fertility management, macro/micronutrient restoration, pH balance, and variable rate precision farming.</p>
+                    <div class="mb-3 d-flex justify-content-center gap-1 flex-wrap">
+                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2 py-1">Soil Health</span>
+                        <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1">Precision Nutrition</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+                        <small class="text-muted fw-bold">⭐ 4.7 <span class="fw-normal text-secondary">(134 reviews)</span></small>
+                        <button class="btn btn-sm btn-outline-success rounded-pill px-3 fw-semibold">
+                            Book Session
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Featured Experts -->
-        <div class="row mb-5">
-            <div class="col-12">
-                <h4 class="text-plant-primary mb-4">Featured Experts</h4>
-            </div>
-            
-            <div class="col-lg-4 mb-4">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <img src="https://via.placeholder.com/100" class="rounded-circle mb-3" alt="Expert">
-                        <h5>Dr. Rajesh Sharma</h5>
-                        <p class="text-muted">Senior Agronomist</p>
-                        <p class="small">25+ years experience in sustainable agriculture and crop management</p>
-                        <div class="mb-3">
-                            <span class="badge bg-success">Rice Expert</span>
-                            <span class="badge bg-primary">Organic Farming</span>
+        <!-- Quick Consultation Form Section -->
+        <div class="row pt-3" id="quick-consultation-section">
+            <div class="col-lg-9 mx-auto">
+                <div class="consultation-form-card" id="consultation-card-element">
+                    <div class="consultation-card-header">
+                        <div class="d-inline-flex p-2 bg-white bg-opacity-20 rounded-circle mb-2">
+                            <i class="fas fa-user-md fa-lg"></i>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">⭐ 4.9 (156 reviews)</small>
-                            <button class="btn btn-sm btn-outline-success">Book Session</button>
-                        </div>
+                        <h4>Quick Expert Consultation</h4>
+                        <p>Receive comprehensive recommendations from senior agricultural advisory officers</p>
                     </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-4 mb-4">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <img src="https://via.placeholder.com/100" class="rounded-circle mb-3" alt="Expert">
-                        <h5>Dr. Priya Patel</h5>
-                        <p class="text-muted">Plant Pathologist</p>
-                        <p class="small">Specialist in crop diseases and integrated pest management</p>
-                        <div class="mb-3">
-                            <span class="badge bg-warning">Plant Protection</span>
-                            <span class="badge bg-info">IPM</span>
+                    
+                    <div class="card-body p-4 p-md-5">
+                        <div class="consultation-alert-banner">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <strong>Average Response Window:</strong> Our certified advisory board reviews and responds within <strong>2 to 4 hours</strong> during operational field cycles.
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">⭐ 4.8 (89 reviews)</small>
-                            <button class="btn btn-sm btn-outline-success">Book Session</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="col-lg-4 mb-4">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <img src="https://via.placeholder.com/100" class="rounded-circle mb-3" alt="Expert">
-                        <h5>Dr. Suresh Kumar</h5>
-                        <p class="text-muted">Soil Scientist</p>
-                        <p class="small">Expert in soil fertility management and precision agriculture</p>
-                        <div class="mb-3">
-                            <span class="badge bg-primary">Soil Health</span>
-                            <span class="badge bg-secondary">Precision Farming</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">⭐ 4.7 (134 reviews)</small>
-                            <button class="btn btn-sm btn-outline-success">Book Session</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Quick Consultation Form -->
-        <div class="row">
-            <div class="col-lg-8 mx-auto">
-                <div class="card border-success">
-                    <div class="card-header bg-success text-white text-center">
-                        <h5 class="mb-0">Quick Expert Consultation</h5>
-                        <small>Get answers to your urgent farming questions</small>
-                    </div>
-                    <div class="card-body">
-                        <div class="alert alert-info">
-                            <i class="fas fa-clock me-2"></i>
-                            <strong>Response Time:</strong> Experts typically respond within 4-6 hours
+
+                        <!-- Feedback notification message placeholder -->
+                        <div id="consultation-alert-box" style="display: none;" class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span id="consultation-alert-text"></span>
+                            <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'"></button>
                         </div>
                         
-                        <form>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Your Name</label>
-                                    <input type="text" class="form-control" required>
+                        <form id="expert-consultation-form" onsubmit="handleConsultationSubmit(event)">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label-custom">
+                                        <i class="fas fa-user text-success"></i> Your Full Name *
+                                    </label>
+                                    <input type="text" class="form-control form-control-custom" id="farmer-name-input" placeholder="e.g., Ramesh Patil" required>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-control" required>
+                                <div class="col-md-6">
+                                    <label class="form-label-custom">
+                                        <i class="fas fa-phone text-success"></i> Phone / WhatsApp Number *
+                                    </label>
+                                    <input type="tel" class="form-control form-control-custom" id="farmer-phone-input" placeholder="e.g., +91 98765 43210" required>
                                 </div>
                             </div>
                             
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Expertise Required</label>
-                                    <select class="form-select" required>
-                                        <option value="">Select Expert Type</option>
-                                        <option value="crop">Crop Management</option>
-                                        <option value="soil">Soil & Nutrition</option>
-                                        <option value="protection">Plant Protection</option>
-                                        <option value="irrigation">Irrigation & Water</option>
-                                        <option value="market">Market & Economics</option>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label-custom">
+                                        <i class="fas fa-briefcase text-success"></i> Required Expertise Department *
+                                    </label>
+                                    <select class="form-select form-select-custom" id="expertise-select" required>
+                                        <option value="">Select Expert Department</option>
+                                        <option value="crop">Crop Scientists & Management</option>
+                                        <option value="soil">Soil & Nutrition Experts</option>
+                                        <option value="protection">Plant Protection & IPM</option>
+                                        <option value="irrigation">Irrigation & Water Engineering</option>
+                                        <option value="market">Agricultural Economics & Market</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label">Preferred Language</label>
-                                    <select class="form-select">
+                                <div class="col-md-6">
+                                    <label class="form-label-custom">
+                                        <i class="fas fa-language text-success"></i> Preferred Consultation Language
+                                    </label>
+                                    <select class="form-select form-select-custom" id="language-select">
                                         <option value="english">English</option>
-                                        <option value="hindi">Hindi</option>
-                                        <option value="regional">Regional Language</option>
+                                        <option value="hindi">Hindi (हिंदी)</option>
+                                        <option value="regional">Regional / State Language</option>
                                     </select>
                                 </div>
                             </div>
                             
-                            <div class="mb-3">
-                                <label class="form-label">Describe Your Problem</label>
-                                <textarea class="form-control" rows="4" 
-                                          placeholder="Provide detailed information about your farming issue..." required></textarea>
+                            <div class="mb-4">
+                                <label class="form-label-custom">
+                                    <i class="fas fa-align-left text-success"></i> Describe Your Agricultural Issue *
+                                </label>
+                                <textarea class="form-control form-control-custom" id="problem-desc-input" rows="4" 
+                                          placeholder="Detail your crop name, current growth stage, visible leaf symptoms or soil test values..." required></textarea>
                             </div>
                             
                             <div class="text-center">
-                                <button type="submit" class="btn btn-success btn-lg">
-                                    <i class="fas fa-paper-plane me-2"></i>Submit for Expert Review
+                                <button type="submit" class="btn btn-submit-consultation">
+                                    <i class="fas fa-paper-plane me-2"></i> Submit for Certified Expert Review
                                 </button>
                             </div>
                         </form>
@@ -201,4 +914,59 @@
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    /**
+     * Pre-selects expert department from the 3 category blocks
+     * and smoothly navigates to the consultation card with visual feedback
+     */
+    function selectExpertCategory(categoryValue, categoryLabel) {
+        const selectElem = document.getElementById('expertise-select');
+        const formCard = document.getElementById('consultation-card-element');
+        const problemInput = document.getElementById('problem-desc-input');
+        
+        if (selectElem) {
+            selectElem.value = categoryValue;
+        }
+
+        if (problemInput && !problemInput.value.trim()) {
+            problemInput.placeholder = `Describe your ${categoryLabel || 'farming'} question or field symptoms here...`;
+        }
+
+        if (formCard) {
+            formCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            formCard.classList.remove('form-highlighted');
+            // Trigger reflow to restart CSS animation
+            void formCard.offsetWidth;
+            formCard.classList.add('form-highlighted');
+
+            setTimeout(() => {
+                const nameInput = document.getElementById('farmer-name-input');
+                if (nameInput) nameInput.focus();
+            }, 600);
+        }
+    }
+
+    /**
+     * Handles consultation form submission with instant feedback
+     */
+    function handleConsultationSubmit(e) {
+        e.preventDefault();
+        const name = document.getElementById('farmer-name-input').value.trim();
+        const selectElem = document.getElementById('expertise-select');
+        const selectedDeptText = selectElem.options[selectElem.selectedIndex].text;
+        const alertBox = document.getElementById('consultation-alert-box');
+        const alertText = document.getElementById('consultation-alert-text');
+
+        if (alertBox && alertText) {
+            alertText.innerHTML = `<strong>Thank you, ${name || 'Farmer'}!</strong> Your consultation request for <strong>${selectedDeptText}</strong> has been logged. A certified agricultural officer will contact you within 2-4 hours.`;
+            alertBox.style.display = 'block';
+            alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        document.getElementById('expert-consultation-form').reset();
+    }
+</script>
 {% endblock %}
