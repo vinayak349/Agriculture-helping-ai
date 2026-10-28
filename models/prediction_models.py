@@ -8,40 +8,34 @@ class PredictionModels:
         self.models_dir = 'models/'
         self.yield_model = None
         self.yield_v2 = None
+        self.yield_scaler = None
         self.disease_model = None
+        self.disease_scaler = None
+        self.disease_encoder = None
         self.weather_model = None
         self.fertilizer_recommender = None
         self.load_models()
-    
+
+    def _safe_load(self, filename):
+        path = f'{self.models_dir}{filename}'
+        if not os.path.exists(path):
+            return None
+        try:
+            return joblib.load(path)
+        except Exception as e:
+            print(f"[models] Could not load {filename}: {e}")
+            return None
+
     def load_models(self):
         """Load all trained models"""
-        try:
-            # Load yield prediction model v2
-            if os.path.exists(f'{self.models_dir}yield_model_v2.pkl'):
-                self.yield_v2 = joblib.load(f'{self.models_dir}yield_model_v2.pkl')
-
-            # Load yield prediction model
-            if os.path.exists(f'{self.models_dir}yield_prediction_model.pkl'):
-                self.yield_model = joblib.load(f'{self.models_dir}yield_prediction_model.pkl')
-                self.yield_scaler = joblib.load(f'{self.models_dir}yield_scaler.pkl')
-            
-            # Load disease prediction model
-            if os.path.exists(f'{self.models_dir}disease_prediction_model.pkl'):
-                self.disease_model = joblib.load(f'{self.models_dir}disease_prediction_model.pkl')
-                self.disease_scaler = joblib.load(f'{self.models_dir}disease_scaler.pkl')
-                self.disease_encoder = joblib.load(f'{self.models_dir}disease_encoder.pkl')
-            
-            # Load weather model
-            if os.path.exists(f'{self.models_dir}weather_model.pkl'):
-                self.weather_model = joblib.load(f'{self.models_dir}weather_model.pkl')
-            
-            # Load fertilizer recommender
-            if os.path.exists(f'{self.models_dir}fertilizer_recommender.pkl'):
-                self.fertilizer_recommender = joblib.load(f'{self.models_dir}fertilizer_recommender.pkl')
-                
-        except Exception as e:
-            pass
-            # print(f"Error loading models: {e}")
+        self.yield_v2 = self._safe_load('yield_model_v2.pkl')
+        self.yield_model = self._safe_load('yield_prediction_model.pkl')
+        self.yield_scaler = self._safe_load('yield_scaler.pkl')
+        self.disease_model = self._safe_load('disease_prediction_model.pkl')
+        self.disease_scaler = self._safe_load('disease_scaler.pkl')
+        self.disease_encoder = self._safe_load('disease_encoder.pkl')
+        self.weather_model = self._safe_load('weather_model.pkl')
+        self.fertilizer_recommender = self._safe_load('fertilizer_recommender.pkl')
     
     def predict_yield(self, rainfall, pesticide, temperature, crop=None):
         """Predict crop yield"""
