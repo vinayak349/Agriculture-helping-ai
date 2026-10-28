@@ -6,7 +6,7 @@ A full-featured Flask web application that provides AI-powered agricultural advi
 
 ### AI Prediction Services
 
-- **Crop Yield Prediction** - Predicts crop yield (hg/ha) using a Random Forest Regressor trained on rainfall, pesticide, and temperature data.
+- **Crop Yield Prediction (v2)** - Predicts crop-specific yield (hg/ha) using a scikit-learn Pipeline (`ColumnTransformer` with `OneHotEncoder` on crop type, followed by a `RandomForestRegressor`) trained on rainfall, pesticide usage, temperature, and crop type. Includes per-crop 1st/99th percentile guardrails and automatic fallback to legacy models.
 - **Disease Risk Assessment** - Evaluates disease risk levels (Low/Medium/High) based on environmental conditions using a Random Forest Classifier, with actionable prevention recommendations.
 - **Fertilizer Recommendation** - Provides NPK (Nitrogen, Phosphorus, Potassium) dosage recommendations tailored to crop type, soil, growth stage, and field size. Includes application schedules and cost estimates.
 - **Weather Prediction** - Forecasts rainfall trends for a given year using Linear Regression on historical data, with general weather advisories.
@@ -37,7 +37,7 @@ A full-featured Flask web application that provides AI-powered agricultural advi
 | Layer | Technologies |
 |-------|-------------|
 | Backend | Flask 2.3.3, Python, SQLite |
-| ML Models | scikit-learn 1.3.0 (Random Forest, Linear Regression) |
+| ML Models | scikit-learn 1.6.1 (Random Forest Pipeline, Linear Regression) |
 | Deep Learning | TensorFlow/Keras (VGG16, MobileNetV2) |
 | Image Processing | OpenCV, Pillow |
 | Frontend | Bootstrap 5, Font Awesome 6, Inter (Google Fonts) |
@@ -50,22 +50,26 @@ A full-featured Flask web application that provides AI-powered agricultural advi
 AgriSense-AI/
 ├── app.py                          # Main Flask application
 ├── database.py                     # SQLite database initialization & CRUD
+├── train_yield_v2.py               # Yield prediction model v2 training script
 ├── requirements.txt                # Python dependencies
 ├── smartfarm.db                    # SQLite database (auto-created)
 ├── dataset/                        # Agricultural datasets
+│   ├── yield_df.csv                # Historical crop yield dataset
 │   └── Agricultural-crops-dataset/
 ├── models/                         # Trained ML/DL models
-│   ├── yield_prediction_model.pkl  # Random Forest Regressor
+│   ├── yield_model_v2.pkl          # Crop-aware Random Forest Regressor Pipeline (v2)
+│   ├── yield_prediction_model.pkl  # Legacy Random Forest Regressor (fallback)
+│   ├── yield_scaler.pkl            # Legacy input scaler
 │   ├── disease_prediction_model.pkl# Random Forest Classifier
 │   ├── weather_model.pkl           # Linear Regression
 │   ├── fertilizer_recommender.pkl  # Fertilizer recommendation
-│   ├── leaf_disease_model.h5       # VGG16 CNN (33 classes)
+│   ├── leaf_disease_model.keras    # VGG16 CNN (33 classes)
+│   ├── leaf_disease_model.h5       # Legacy VGG16 format
 │   ├── crop_cnn_model.keras        # MobileNetV2 CNN (30 classes)
-│   ├── yield_scaler.pkl            # Input normalization
 │   ├── disease_scaler.pkl          # Input normalization
 │   ├── disease_encoder.pkl         # Label encoding
 │   ├── labels.json                 # Crop classification metadata
-│   └── prediction_models.py        # Model loading & inference
+│   └── prediction_models.py        # Fault-tolerant model loading & inference
 ├── static/
 │   ├── css/style.css               # Custom styling
 │   ├── js/
@@ -104,6 +108,7 @@ AgriSense-AI/
 |---------|--------|
 | Plant Disease Detection | [Google Drive](https://drive.google.com/file/d/1RKNH8i_WDeJ7rFKuCgdTJsfwkqN0Z8ZJ/view) |
 | Agriculture Crops (Classification) | [Kaggle](https://www.kaggle.com/datasets/osamajalilhassan/agriculture-crops-dataset) |
+| Crop Yield (Historical) | [FAO / Kaggle](dataset/yield_df.csv) |
 
 ## Database Schema
 
@@ -114,13 +119,13 @@ AgriSense-AI/
 | `forum_posts` | Community forum questions with category and crop tags |
 | `marketplace_listings` | Buy/sell listings with item details and location |
 
-Default admin account: `admin@agrisenseai.com` / `admin123`
+Default admin account: `admin@agripredict.com` / `admin123`
 
 ## API Endpoints
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/api/predict-yield` | POST | Crop yield prediction |
+| `/api/predict-yield` | POST | Crop yield prediction (crop-aware v2 with legacy fallback) |
 | `/api/predict-disease` | POST | Disease risk assessment |
 | `/api/recommend-fertilizer` | POST | NPK fertilizer recommendation |
 | `/api/predict-weather` | POST | Rainfall forecast |
@@ -150,6 +155,10 @@ pip install -r requirements.txt
 Pre-trained models are included in `models/`. To retrain:
 
 ```bash
+# Retrain crop-aware yield prediction model v2
+python train_yield_v2.py
+
+# Or train legacy models/deep learning via notebooks
 jupyter notebook training.ipynb
 ```
 
@@ -159,7 +168,7 @@ jupyter notebook training.ipynb
 python app.py
 ```
 
-Open `http://127.0.0.1:5000/` in your browser.
+Open `http://127.0.0.1:5001/` (or `http://127.0.0.1:5000/`) in your browser.
 
 ## Supported Crops & Plants
 
