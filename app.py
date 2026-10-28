@@ -366,7 +366,7 @@ def api_predict_yield():
         crop = data.get('crop', 'Maize')
 
         if models_loaded:
-            yield_pred = prediction_models.predict_yield(rainfall, pesticide, temperature)
+            yield_pred = prediction_models.predict_yield(rainfall, pesticide, temperature, crop)
             message = f'Predicted yield for {crop}: {yield_pred} hg/ha'
         else:
             base_yield = 30000

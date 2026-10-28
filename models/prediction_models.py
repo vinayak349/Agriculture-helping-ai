@@ -1,11 +1,13 @@
 import joblib
 import numpy as np
+import pandas as pd
 import os
 
 class PredictionModels:
     def __init__(self):
         self.models_dir = 'models/'
         self.yield_model = None
+        self.yield_v2 = None
         self.disease_model = None
         self.weather_model = None
         self.fertilizer_recommender = None
@@ -14,6 +16,10 @@ class PredictionModels:
     def load_models(self):
         """Load all trained models"""
         try:
+            # Load yield prediction model v2
+            if os.path.exists(f'{self.models_dir}yield_model_v2.pkl'):
+                self.yield_v2 = joblib.load(f'{self.models_dir}yield_model_v2.pkl')
+
             # Load yield prediction model
             if os.path.exists(f'{self.models_dir}yield_prediction_model.pkl'):
                 self.yield_model = joblib.load(f'{self.models_dir}yield_prediction_model.pkl')
@@ -37,8 +43,29 @@ class PredictionModels:
             pass
             # print(f"Error loading models: {e}")
     
-    def predict_yield(self, rainfall, pesticide, temperature):
+    def predict_yield(self, rainfall, pesticide, temperature, crop=None):
         """Predict crop yield"""
+        crop_map = {
+            'Rice': 'Rice, paddy',
+            'Potato': 'Potatoes',
+            'Soybean': 'Soybeans',
+            'Sweet potato': 'Sweet potatoes',
+            'Plantains': 'Plantains and others'
+        }
+        if crop:
+            crop = crop_map.get(crop, crop)
+
+        if self.yield_v2 and crop and crop in self.yield_v2.get('crops', []):
+            df_row = pd.DataFrame(
+                [[rainfall, pesticide, temperature, crop]],
+                columns=['rainfall', 'pesticide', 'temperature', 'crop']
+            )
+            prediction = self.yield_v2['model'].predict(df_row)[0]
+            crop_ranges = self.yield_v2.get('ranges', {}).get(crop)
+            if crop_ranges:
+                prediction = float(np.clip(prediction, crop_ranges['lo'], crop_ranges['hi']))
+            return round(prediction, 2)
+
         if self.yield_model and self.yield_scaler:
             input_data = np.array([[rainfall, pesticide, temperature]])
             input_scaled = self.yield_scaler.transform(input_data)
