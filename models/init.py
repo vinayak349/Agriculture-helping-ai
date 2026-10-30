@@ -15,7 +15,7 @@ MODEL_INFO = {
     "yield_prediction": {
         "name": "Crop Yield Prediction",
         "algorithm": "Random Forest Regressor",
-        "accuracy": "95%",
+        "accuracy": "Up to 88%",
         "features": ["rainfall", "pesticide_usage", "temperature"]
     },
     "disease_prediction": {
