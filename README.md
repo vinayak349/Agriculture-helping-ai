@@ -142,8 +142,8 @@ Default admin account: `admin@agripredict.com` / `admin123`
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/vinayak349/Agriculture-helping-ai.git
-cd Agriculture-helping-ai
+git clone https://github.com/vinayak349/Agrisense-AI.git
+cd Agrisense-AI
 python -m venv venv
 source venv/bin/activate    # macOS/Linux
 # .\venv\Scripts\activate   # Windows
